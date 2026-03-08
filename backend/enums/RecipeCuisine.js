@@ -1,0 +1,17 @@
+export const RECIPE_CUISINE = {
+  ITALIAN: "Italian",
+  FRENCH: "French",
+  CHINESE: "Chinese",
+  JAPANESE: "Japanese",
+  MEXICAN: "Mexican",
+  INDIAN: "Indian",
+  MEDITERRANEAN: "Mediterranean",
+  AMERICAN: "American",
+  THAI: "Thai",
+  KOREAN: "Korean",
+  SPANISH: "Spanish",
+  GREEK: "Greek",
+  VIETNAMESE: "Vietnamese",
+  TURKISH: "Turkish",
+  ARABIC: "Arabic",
+}
