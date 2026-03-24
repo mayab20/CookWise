@@ -10,7 +10,8 @@ import recipesRoute from "./routes/recipeRoutes.js";
 import shoppingRoute from "./routes/shoppingListRoutes.js";
 import itemsRoute from "./routes/itemRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
-
+import favoriteRoutes from "./routes/favoriteRoutes.js";
+import todaysRecipeRoutes from "./routes/todaysRecipeRoutes.js";
 
 const app = express();
 app.use(
@@ -36,7 +37,8 @@ app.use("/recipes", recipesRoute);
 app.use("/shopping-list", shoppingRoute);
 app.use("/items", itemsRoute);
 app.use("/admin", adminRoutes);
-
+app.use("/favorites", favoriteRoutes);
+app.use("/todays-recipes", todaysRecipeRoutes);
 
 
 // Server
