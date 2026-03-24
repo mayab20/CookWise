@@ -3,13 +3,14 @@ import 'package:http/http.dart' as http;
 import 'package:frontend/services/api_service.dart';
 import 'package:frontend/models/item.dart';
 
-class ItemService extends ApiService {
-  ItemService({required super.baseUrl});
+class ItemService {
+  final ApiService api;
+  ItemService(this.api);
 
   Future<List<Item>> getItems() async {
     final response = await http.get(
-      Uri.parse('$baseUrl/items'),
-      headers: authHeaders,
+      Uri.parse('${api.baseUrl}/items'),
+      headers: api.authHeaders,
     );
 
     if (response.statusCode == 200) {
@@ -22,8 +23,8 @@ class ItemService extends ApiService {
 
   Future<Item> addItem(Item item) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/items'),
-      headers: headers,
+      Uri.parse('${api.baseUrl}/items'),
+      headers: api.headers,
       body: jsonEncode(item.toJson()),
     );
 
@@ -36,8 +37,8 @@ class ItemService extends ApiService {
 
   Future<void> deleteItem(String itemId) async {
     final response = await http.delete(
-      Uri.parse('$baseUrl/items/$itemId'),
-      headers: headers,
+      Uri.parse('${api.baseUrl}/items/$itemId'),
+      headers: api.headers,
     );
 
     if (response.statusCode != 200) {
@@ -52,8 +53,8 @@ class ItemService extends ApiService {
     List<String> units,
   ) async {
     final response = await http.put(
-      Uri.parse('$baseUrl/items/$itemId'),
-      headers: headers,
+      Uri.parse('${api.baseUrl}/items/$itemId'),
+      headers: api.headers,
       body: jsonEncode({'name': name, 'category': category, 'units': units}),
     );
 
@@ -63,5 +64,4 @@ class ItemService extends ApiService {
       throw Exception('Failed to update item: ${response.body}');
     }
   }
-
 }
