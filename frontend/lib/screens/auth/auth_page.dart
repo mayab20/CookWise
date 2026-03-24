@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../user/user_viewmodel.dart';
+import 'package:frontend/screens/user/user_viewmodel.dart';
 import 'package:frontend/core/theme/colors.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/widgets/floating_shapes_painter.dart';
