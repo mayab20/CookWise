@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/screens/home/home_viewmodel.dart';
 import 'package:frontend/screens/pantry/pantry_viewmodel.dart';
-import 'package:frontend/services/admin_service.dart';
+import 'package:frontend/services/item_service.dart';
 import 'package:frontend/services/pantry_service.dart';
 import 'package:frontend/services/recipe_service.dart';
+import 'package:frontend/services/shopping_list_service.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend/services/api_service.dart';
 import 'package:frontend/screens/user/user_viewmodel.dart';
@@ -20,6 +21,10 @@ void main() {
     create: (_) => ApiService(baseUrl: baseUrl),
   ),
 
+  Provider<ItemService>(
+    create: (context) => ItemService(context.read<ApiService>()),
+  ),
+
   Provider<RecipeService>(
     create: (context) => RecipeService(context.read<ApiService>()),
   ),
@@ -28,8 +33,8 @@ void main() {
     create: (context) => PantryService(context.read<ApiService>()),
   ),
 
-  Provider<AdminService>(
-    create: (context) => AdminService(context.read<ApiService>()),
+  Provider<ShoppingListService>(
+    create: (context) => ShoppingListService(context.read<ApiService>()),
   ),
 
   ChangeNotifierProxyProvider3<

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/services/item_service.dart';
 import 'package:frontend/services/pantry_service.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend/models/pantry.dart';
@@ -7,7 +8,6 @@ import 'package:frontend/core/theme/colors.dart';
 import 'package:frontend/screens/pantry/pantry_viewmodel.dart';
 import 'package:frontend/screens/user/user_viewmodel.dart';
 import 'package:frontend/widgets/searchable_item_dropdown.dart';
-import 'package:frontend/services/item_service.dart';
 
 class PantryPage extends StatefulWidget {
   const PantryPage({super.key});
@@ -52,13 +52,14 @@ class _PantryPageState extends State<PantryPage> {
     'other',
   ];
 
+  
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final pantryService = context.read<PantryService>();
       final userViewModel = context.read<UserViewModel>();
-
       setState(() {
         _viewModel = PantryViewModel(
           pantryService: pantryService,
@@ -70,6 +71,7 @@ class _PantryPageState extends State<PantryPage> {
   }
 
   void _loadPantryItems() {
+    final pantryService = context.read<PantryService>();
     final userViewModel = context.read<UserViewModel>();
     if (userViewModel.user?.id != null) {
       _viewModel?.fetchPantryItems(userViewModel.user!.id!);
@@ -77,7 +79,7 @@ class _PantryPageState extends State<PantryPage> {
       if (_viewModel == null) {
         setState(() {
           _viewModel = PantryViewModel(
-            pantryService: context.read<PantryService>(),
+            pantryService: pantryService,
             userViewModel: userViewModel,
           );
         });
@@ -442,19 +444,21 @@ class _PantryPageState extends State<PantryPage> {
   }
 
   void _showAddItemDialog() {
+    final messenger = ScaffoldMessenger.of(context);
     showDialog(
       context: context,
       builder: (context) => Consumer<UserViewModel>(
         builder: (context, userViewModel, child) => AddItemToPantryDialog(
           onItemAdded: (pantryItem) async {
-            final messenger = ScaffoldMessenger.of(context);
             try {
               await _viewModel?.addPantryItem(pantryItem);
+              if (!mounted) return;
               _loadPantryItems();
               messenger.showSnackBar(
                 const SnackBar(content: Text('Item added successfully!')),
               );
             } catch (e) {
+              if (!mounted) return;
               messenger.showSnackBar(
                 SnackBar(content: Text('Error adding item: $e')),
               );
@@ -540,12 +544,14 @@ class _AddItemToPantryDialogState extends State<AddItemToPantryDialog> {
   @override
   void initState() {
     super.initState();
-    _loadAvailableItems();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadAvailableItems();
+    });
   }
 
   Future<void> _loadAvailableItems() async {
-    setState(() => _isLoading = true);
     final messenger = ScaffoldMessenger.of(context);
+    setState(() => _isLoading = true);
     try {
       final itemService = context.read<ItemService>();
       _availableItems = await itemService.getItems();
